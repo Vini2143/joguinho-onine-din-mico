@@ -1,42 +1,7 @@
 
+export class Player {
 
-export class Game {
-
-    constructor() {
-        //variaveis
-
-        this.objects = {}
-
-        this.movements = {
-            w : object => { 
-                object.y = Math.max(object.y - 10, 5)
-            },
-            a : object => { 
-                object.x = Math.max(object.x - 10, 5)
-            },
-            s : object => { 
-                object.y = Math.min(object.y + 10, 395)
-            },
-            d : object => { 
-                object.x = Math.min(object.x + 10, 595) 
-            } 
-
-        }
-    }
-
-
-    //funções
-
-    moveObject(id, command) {
-        let moveFunction = this.movements[command]
-        
-        if (moveFunction) {
-
-            moveFunction(this.objects[id])
-        }
-    }
-
-    addPlayer(id, color = false) {
+    constructor(color) {
 
         let colors = [
             '#FF0000',
@@ -46,11 +11,40 @@ export class Game {
             '#0CFF00'
         ]
 
-        this.objects[id] = { 
-            x : 55, 
-            y : 55,
-            color: color ? color : colors[Math.floor(Math.random() * 5)]
-        }
+        this.x = 55
+        this.y = 55
+        this.velocity = [0, 0]
+        this.color = color ? color : colors[Math.floor(Math.random() * 5)]
+
+        setInterval(() => {
+                    
+            this.x += this.velocity[0]
+            this.y += this.velocity[1]
+
+        }, 25)
+    }
+}
+
+export class Game {
+
+    constructor() {
+        //variaveis
+
+        this.objects = {}
+
+    }
+
+
+    //funções
+
+    moveObject(id, dir) {
+        let vel = 2
+        this.objects[id].velocity = [dir[0]*vel, dir[1]*vel]
+    }
+    
+    addPlayer(id, color = false) {
+
+        this.objects[id] = new Player(color)
 
         return this.objects[id]
         

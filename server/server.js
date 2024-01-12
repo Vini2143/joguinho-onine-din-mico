@@ -33,10 +33,10 @@ ws.on('connection', (socket) => {
     socket.on('message', message => {
         
 
-        receiveEvent(message, 'move', command => {
+        receiveEvent(message, 'move', direction => {
 
-            game.moveObject(socket.id, command)
-            sendToAll(ws, emitEvent('move', socket.id, command))
+            game.moveObject(socket.id, direction)
+            sendToAll(ws, emitEvent('move', socket.id, direction))
         })
 
 

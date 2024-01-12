@@ -1,7 +1,7 @@
 //imports
 
 import { Game } from '../game.js'
-import { emitEvent, receiveEvent } from '../functions.js'
+import { emitEvent, receiveEvent, normalize } from '../functions.js'
 
 
 //variáveis
@@ -65,9 +65,33 @@ ws.onmessage = function (message) {
 }
 
 
+let keys = {
+	w : 0,
+	a : 0,
+	s : 0,
+	d : 0
+}
+
+function update() {
+
+	let direction = normalize([keys['d'] - keys['a'], keys['s'] - keys['w']])
+
+	ws.send(emitEvent('move', direction))
+
+	
+}
+
+
 document.addEventListener('keydown', (event) => {
 
-	ws.send(emitEvent('move', event.key))
+	keys[event.key] = 1
+	update()
+})
+
+document.addEventListener('keyup', (event) => {
+
+	keys[event.key] = 0
+	update()
 })
 
 game.render(context)
