@@ -38,8 +38,6 @@ ws.on('connection', (socket) => {
             game.moveObject(socket.id, direction)
             sendToAll(ws, emitEvent('move', socket.id, direction))
         })
-
-
     })
 
     socket.on('close', () => {

@@ -1,7 +1,7 @@
 //imports
 
-import { Game } from '../game.js'
-import { emitEvent, receiveEvent, normalize } from '../functions.js'
+import { Game, Vector } from '../game.js'
+import { emitEvent, receiveEvent } from '../functions.js'
 
 
 //variáveis
@@ -34,22 +34,18 @@ ws.onmessage = function (message) {
 
 		player.id = id
     	game.objects = objects
-		
 	})
 	
 	receiveEvent(message.data, 'add', (id, color) => {
+
 		if (player.id == id) {
 
 			player.color = color
 			game.addPlayer(id, '#00FBFF')
-
-
 		} else {
+
 			game.addPlayer(id, color)
 		}
-
-
-		
 	})
 
 	receiveEvent(message.data, 'remove', id => {
@@ -59,7 +55,6 @@ ws.onmessage = function (message) {
 	receiveEvent(message.data, 'move', (id, command) => {
 
 		game.moveObject(id, command)
-		
 	})
   
 }
@@ -74,11 +69,9 @@ let keys = {
 
 function update() {
 
-	let direction = normalize([keys['d'] - keys['a'], keys['s'] - keys['w']])
+	const direction = new Vector(keys['d'] - keys['a'], keys['s'] - keys['w'])
 
-	ws.send(emitEvent('move', direction))
-
-	
+	ws.send(emitEvent('move', direction.normalize()))
 }
 
 
